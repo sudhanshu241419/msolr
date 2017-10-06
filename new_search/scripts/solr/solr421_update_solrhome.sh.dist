@@ -1,0 +1,22 @@
+#!/bin/bash
+# Script for updating solr schema and config files from the msolr git repo
+
+tomcatHost="http://localhost:8080/"
+echo "Pass the tomcat context which needs to be updated e.g. msearch followed by [ENTER]:"
+
+read context
+
+stopUrl="${tomcatHost}/manager/text/stop?path=/${context}"
+startUrl="${tomcatHost}/manager/text/start?path=/${context}"
+
+echo "Stopping application deployed at $context"
+curl -u dsyzug:dsyzug "$stopUrl"
+
+solrHome="/opt/${context}"
+sudo cp -r ../solr/solr-421 "${solrHome}" 
+#sudo chown -hR tomcat7:tomcat7 "$solrHome"
+sudo chown -hR dhirendra "$solrHome"
+sudo chmod 755 -R "$solrHome"
+
+echo "Starting application deployed at $context"
+curl -u dsyzug:dsyzug "$startUrl"

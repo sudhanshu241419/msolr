@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema name="hbuser" version="1.5">
+  <!-- attribute "name" is the name of this schema and is only used for display purposes.
+       version="x.y" is Solr's version number for the schema syntax and
+       semantics.  It should not normally be changed by applications.
+
+       1.0: multiValued attribute did not exist, all fields are multiValued
+            by nature
+       1.1: multiValued attribute introduced, false by default
+       1.2: omitTermFreqAndPositions attribute introduced, true by default
+            except for text fields.
+       1.3: removed optional field compress feature
+       1.5: omitNorms defaults to true for primitive field types
+            (int, float, boolean, string...)
+     -->
+<fields>
+
+  <!-- addResSingleValuedData() -->
+
+  <field name="uid" type="string" indexed="true" stored="true" required="true"/>
+  <field name="uname" type="string" indexed="true" stored="true"/>
+  <field name="uname_eng" type="hb_edgengram" indexed="true" stored="false"/>
+  <field name="email" type="string" indexed="true" stored="true"/>
+  <field name="image_url" type="string" indexed="false" stored="true" default=""/>
+  <field name="city" type="string" indexed="true" stored="true"/>
+  <field name="zipcode" type="string" indexed="true" stored="true"/>
+
+  <!-- reserved fields -->
+  <field name="indexed_on" type="date" indexed="false" stored="true" default="NOW"/>
+  <field name="_version_" type="long" indexed="true" stored="true"/>
+  <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
+
+</fields>
+
+ <!-- Field to use to determine and enforce document uniqueness.
+      Unless this field is marked with required="false", it will be a required field
+ -->
+<uniqueKey>uid</uniqueKey>
+
+<!-- copy fields for edgengram on user name -->
+<copyField source="uname" dest="uname_eng"/>
+
+<types>
+
+    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+
+    <fieldType name="hb_general" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+     </analyzer>
+    </fieldType>
+
+    <fieldType name="hb_edgengram" class="solr.TextField" positionIncrementGap="100" stored="false">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="10" side="front"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+<!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+    <!-- boolean type: "true" or "false" -->
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <!--Binary data type. The data should be sent/retrieved in as Base64 encoded Strings -->
+    <fieldtype name="binary" class="solr.BinaryField"/>
+
+<!-- Default numeric field types. For faster range queries, consider the tint/tfloat/tlong/tdouble types. -->
+    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+
+<!--
+     Numeric field types that index each value at various levels of precision to accelerate range queries when the number of values between
+   the range endpoints is large. See the javadoc for NumericRangeQuery for internal implementation details.
+     Smaller precisionStep values (specified in bits) will lead to more tokens indexed per value, slightly larger index size,
+   and faster range queries. A precisionStep of 0 disables indexing at different precision levels.
+-->
+    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
+
+    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+    <!-- A Trie based date field for faster date range queries and date faceting. -->
+    <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
+
+    <fieldType name="pint" class="solr.IntField"/>
+    <fieldType name="plong" class="solr.LongField"/>
+    <fieldType name="pfloat" class="solr.FloatField"/>
+    <fieldType name="pdouble" class="solr.DoubleField"/>
+    <fieldType name="pdate" class="solr.DateField" sortMissingLast="true"/>
+
+    <fieldType name="sint" class="solr.SortableIntField" sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="slong" class="solr.SortableLongField" sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="sfloat" class="solr.SortableFloatField" sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="sdouble" class="solr.SortableDoubleField" sortMissingLast="true" omitNorms="true"/>
+
+    <fieldType name="random" class="solr.RandomSortField" indexed="true" />
+
+    <!-- since fields of this type are by default not stored or indexed, any data added to them will be ignored outright.  -->
+    <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
+
+  </types>
+
+</schema>

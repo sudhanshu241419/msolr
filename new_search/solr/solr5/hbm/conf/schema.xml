@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema name="hbmenu" version="1.5">
+  <!-- attribute "name" is the name of this schema and is only used for display purposes.
+       version="x.y" is Solr's version number for the schema syntax and
+       semantics.  It should not normally be changed by applications.
+
+      1.0: multiValued attribute did not exist, all fields are multiValued
+           by nature
+      1.1: multiValued attribute introduced, false by default
+      1.2: omitTermFreqAndPositions attribute introduced, true by default
+           except for text fields.
+      1.3: removed optional field compress feature
+      1.5: omitNorms defaults to true for primitive field types
+           (int, float, boolean, string...)
+    -->
+
+    <fields>
+
+        <!-- function addMenuMainData()-->
+        <field name="menu_id" type="tint" indexed="true" stored="true" required="true"/>
+        <field name="res_id" type="tint" indexed="true" stored="true"/>
+
+        <field name="menu_name" type="hb_general" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true" />
+        <field name="menu_fct" type="hb_facet" indexed="true" stored="true"/>
+        <field name="menu_eng" type="hb_edgengram" indexed="true" stored="false"/>
+
+        <field name="menu_item_desc" type="hb_general" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true"/>
+        <field name="online_order_allowed" type="tint" indexed="true" stored="true" default="1"/>
+  
+        <!-- function addMenuCuisines() -->
+        <field name="menu_cuisine" type="hb_general" indexed="true" stored="true" default="" termVectors="true" termPositions="true" termOffsets="true"/>
+        <field name="menu_cuisine_fct" type="hb_facet" indexed="true" default="" multiValued="true"/>
+        <field name="menu_cuisine_type" type="string" indexed="false" stored="true" default="" multiValued="true"/>
+
+        <field name="menu_cuisines_id" type="tint" indexed="true" stored="true" multiValued="true"/>
+        <field name="menu_image" type="string" indexed="false" stored="true"/>
+
+        <field name="res_neighborhood" type="hb_facet" indexed="true" stored="true"/>
+        <field name="borough" type="string" indexed="true" stored="true" default=""/>
+        <field name="nbd_search" type="hb_general" indexed="true" stored="false"/>
+
+        <!-- function addSingleValuedData($mysqli,$doc)-->
+        <field name="res_name" type="hb_general" indexed="true" stored="true"/>
+        <field name="res_fct" type="hb_facet" indexed="true" stored="false"/>
+
+        <!-- addMenuPrices() menu_prices Table -->
+        <field name="menu_price_type" type="string" indexed="false" stored="true"/>
+        <field name="menu_price" type="string" indexed="false" stored="true" default=""/>
+        <field name="menu_price_num" type="tfloat" indexed="true" stored="true" default="0"/>
+        <field name="menu_price_desc" type="string" indexed="false" stored="true"/>
+
+        <!-- function addMenuAddons -->
+        <field name="menu_addon" type="string" indexed="false" stored="true" default=""/>
+
+        <field name="res_code" type="string" indexed="true" stored="true"/>
+        <field name="res_address" type="string" indexed="true" stored="true"/>
+        <field name="res_street" type="hb_facet" indexed="true" stored="true"/>
+        <field name="city_id" type="tint" indexed="true" stored="true"/>
+        <field name="res_city" type="hb_facet" indexed="true" stored="true"/>
+        <field name="res_zipcode" type="string" indexed="true" stored="true"/>
+        <field name="allowed_zip" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="res_landmark" type="hb_general" indexed="true" stored="true"/>
+        <field name="res_primary_image" type="string" indexed="false" stored="true" default=""/>
+        <field name="location_lat" type="tdouble" indexed="false" stored="true"/>
+        <field name="location_long" type="tdouble" indexed="false" stored="true"/>
+        <field name="latlong" type="location" indexed="true" stored="true"/>
+        <!-- nbd_lat = restaurants_location.neighborhood_latitude neighborhood=restaurants.landmark -->
+        <field name="nbd_lat" type="tdouble" indexed="true" stored="true"/>
+        <field name="nbd_long" type="tdouble" indexed="true" stored="true"/>
+        <field name="nbd_latlong" type="location" indexed="true" stored="false"/>
+        <field name="delivery_geo" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+        <field name="order_pass_through" type="tint" indexed="true" stored="true" default="0"/>
+
+        <!-- function addResDetails -->
+        <field name="res_area" type="string" indexed="true" stored="true"/>
+
+        <field name="accept_cc" type="tint" indexed="true" stored="true"/>
+        <field name="accept_cc_phone" type="tint" indexed="true" stored="true" default="0"/>
+
+        <field name="res_delivery" type="tint" indexed="true" stored="true"/>
+        <field name="res_takeout" type="tint" indexed="true" stored="true"/>
+        <field name="res_dining" type="tint" indexed="true" stored="true"/>
+        <field name="res_reservations" type="tint" indexed="true" stored="true" default="0"/>
+
+        <field name="res_price" type="string" indexed="false" stored="true" default=""/>
+        <field name="r_price_num" type="tint" indexed="true" stored="true"/>
+
+        <field name="res_minimum_delivery" type="string" indexed="true" stored="true"/>
+        <field name="delivery_area" type="tfloat" indexed="true" stored="true"/>
+
+        <field name="r_review_count" type="tint" indexed="true" stored="true"/>
+        <field name="has_reviews" type="tint" indexed="true" stored="true"/>
+
+        <field name="r_menu_available" type="tint" indexed="true" stored="true"/>
+        <field name="r_menu_without_price" type="tint" indexed="true" stored="true"/>
+
+        <field name="meals_arr" type="hb_facet" indexed="true" stored="true" multiValued="true"/>
+        <field name="is_chain" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="r_closed" type="tint" indexed="true" stored="true" default="1"/>
+        <field name="r_inactive" type="tint" indexed="true" stored="true" default="0"/>
+
+        <!-- addResCalData -->
+        <field name="working_days" type="string" indexed="false" stored="true" multiValued="true"/>
+        <field name="delivery_hrs" type="string" indexed="false" stored="false"/>
+        <field name="oh_ft" type="string" indexed="false" stored="false"/>
+  
+        <!-- fields for delivery -->
+        <dynamicField name="bst1_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="bet1_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="lst1_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="let1_*" type="tint" indexed="true" stored="true"/>
+        <!-- for dinner we use 2 fields to cover restaurants which remain open after midnight -->
+        <dynamicField name="dst1_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="det1_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="dst2_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="det2_*" type="tint" indexed="true" stored="true"/>
+
+        <!-- fields for takeout, dinein, reservation. max 4 fields,
+        ooh=open operating hour, coh=close operating hour -->
+        <dynamicField name="ooh*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="coh*" type="tint" indexed="true" stored="true"/>
+
+        <!-- need to be removed later-->
+        <dynamicField name="ot1_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="ct1_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="ot2_*" type="tint" indexed="true" stored="true"/>
+        <dynamicField name="ct2_*" type="tint" indexed="true" stored="true"/>
+
+        <!-- addResFeatures() -->
+        <field name="feature_name" type="hb_general" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true"/>
+        <field name="feature_fct" type="hb_facet" indexed="true" stored="false" multiValued="true"/>
+        <field name="feature_id" type="tint" indexed="true" stored="false" multiValued="true"/>
+
+        <!-- addResCuisines -->
+        <field name="res_cuisine" type="hb_general" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true"/>
+        <field name="cuisine_fct" type="hb_facet" indexed="true" stored="false" multiValued="true"/>
+        <field name="cuisine_id" type="tint" indexed="false" stored="false" multiValued="true"/>
+
+        <!-- addResDeals() restaurant_deals table:-->
+        <field name="has_deals" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="has_delivery_deals" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="has_takeout_deals" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="has_dinein_deals" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="has_reservation_deals" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="deals_count" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="deals" type="string" indexed="false" stored="true" default="[]"/>
+
+        <!-- addResCoupons() restaurant_coupons table -->
+        <field name="has_coupons" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="coupons_count" type="tint" indexed="true" stored="true" default="0"/>
+
+        <!-- addResSpecialFeatures -->
+        <field name="is_registered" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="preordering_enabled" type="tint" indexed="true" stored="true" default="0"/>
+        <field name="ordering_enabled" type="tint" indexed="true" stored="true" default="0"/>
+
+        <!-- restaurant score in the range [0,100] and menu item score -->
+        <field name="r_score" type="tfloat" indexed="true" stored="true" default="0"/>
+        <field name="m_score" type="tfloat" indexed="true" stored="true" default="0"/>
+
+        <!-- popularity based on menu_bookmarks -->
+        <field name="popularity" type="tint" indexed="true" stored="true" default="0"/>
+
+        <!-- spellcheker -->
+        <field name="hbspell" type="hb_spell" indexed="true" stored="false" multiValued="true"/>
+
+        <!-- reserved fields -->
+        <field name="indexed_on" type="date" indexed="false" stored="true" default="NOW"/>
+        <field name="_version_" type="long" indexed="true" stored="true"/>
+        <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
+  
+        <!-- restaurant tags for search -->
+        <field name="tags" type="hb_general" indexed="true" stored="true"
+               termVectors="true" termPositions="true" termOffsets="true"/>
+        <field name="tags_fct" type="hb_facet" indexed="true" stored="true" multiValued="true"/>
+        <field name="is_promoted" type="tint" indexed="true" stored="true" default="0"/>
+        
+        <field name="ad_keywords" type="hb_general" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true"/>
+        <field name="ad_keywords_fct" type="hb_facet" indexed="true" stored="false" multiValued="true"/>
+
+    </fields>
+
+    <!-- Field to use to determine and enforce document uniqueness.
+         Unless this field is marked with required="false", it will be a required field
+    -->
+    <uniqueKey>menu_id</uniqueKey>
+
+    <!-- copy fields spellchecker -->
+    <copyField source="menu_name" dest="hbspell"/>
+
+    <copyField source="menu_name" dest="menu_fct"/>
+    <!-- copy fields for edgengram on menu_name -->
+    <copyField source="menu_name" dest="menu_eng"/>
+
+    <copyField source="res_neighborhood" dest="nbd_search"/>
+    <copyField source="res_name" dest="res_fct"/>
+
+    <types>
+
+        <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+    
+        <fieldType name="location_rpt" 
+                   class="solr.SpatialRecursivePrefixTreeFieldType" 
+                   spatialContextFactory="com.spatial4j.core.context.jts.JtsSpatialContextFactory"
+                   distErrPct="0.025"
+                   maxDistErr="0.000009"
+                   autoIndex="true"
+                   units="degrees" />
+
+        <fieldType name="hb_general" class="solr.TextField" positionIncrementGap="100">
+            <analyzer type="index">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <!--<filter class="solr.PorterStemFilterFactory"/>-->
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+            <analyzer type="query">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <!--<filter class="solr.PorterStemFilterFactory"/>-->
+                <filter class="solr.LowerCaseFilterFactory"/>
+                <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+            </analyzer>
+        </fieldType>
+
+        <fieldType name="hb_spell" class="solr.TextField"  positionIncrementGap="100">
+            <analyzer>
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+        </fieldType>
+
+        <fieldType name="hb_facet" class="solr.TextField" positionIncrementGap="100">
+            <analyzer>
+                <tokenizer class="solr.KeywordTokenizerFactory"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+        </fieldType>
+
+        <fieldType name="hb_edgengram" class="solr.TextField" positionIncrementGap="100" stored="false">
+            <analyzer type="index">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+                <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="10"/>
+            </analyzer>
+            <analyzer type="query">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+        </fieldType>
+
+        <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
+        <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+        <!-- boolean type: "true" or "false" -->
+        <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+        <!--Binary data type. The data should be sent/retrieved in as Base64 encoded Strings -->
+        <fieldtype name="binary" class="solr.BinaryField"/>
+
+        <!-- Default numeric field types. For faster range queries, consider the tint/tfloat/tlong/tdouble types. -->
+        <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+
+        <!--
+             Numeric field types that index each value at various levels of precision to accelerate range queries when the number of values between
+           the range endpoints is large. See the javadoc for NumericRangeQuery for internal implementation details.
+             Smaller precisionStep values (specified in bits) will lead to more tokens indexed per value, slightly larger index size,
+           and faster range queries. A precisionStep of 0 disables indexing at different precision levels.
+        -->
+        <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0"/>
+        <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0"/>
+        <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0"/>
+        <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
+
+        <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+        <!-- A Trie based date field for faster date range queries and date faceting. -->
+        <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
+
+        <fieldType name="random" class="solr.RandomSortField" indexed="true" />
+
+        <!-- since fields of this type are by default not stored or indexed, any data added to them will be ignored outright.  -->
+        <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
+
+    </types>
+
+</schema>
